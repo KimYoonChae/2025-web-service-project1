@@ -22,16 +22,16 @@ public class MenuItemdao implements ICRUD{
     }
     public void loadData(){
         list.clear();
-        String selectall = "select * from menu_item";
+        String selectall = "select * from cafemenu";
         try{
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(selectall);
             while(true){
                 if(!rs.next()) break;
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                int price = rs.getInt("price");
-                String description = rs.getString("description");
+                int id = rs.getInt("field1");
+                String name = rs.getString("field2");
+                int price = rs.getInt("field3");
+                String description = rs.getString("field4");
                 list.add(new MenuItem(id,name,description,price));
             }
             rs.close();

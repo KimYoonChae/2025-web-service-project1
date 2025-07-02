@@ -13,7 +13,7 @@ public class DbUtil {
         if (con == null) {
             try {
                 Class.forName("org.sqlite.JDBC");
-                con= DriverManager.getConnection("jdbc:sqlite:target/mymenulist.db");
+                con= DriverManager.getConnection("jdbc:sqlite:target/menu.db");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (SQLException e) {
