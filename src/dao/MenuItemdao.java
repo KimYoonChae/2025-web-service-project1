@@ -7,6 +7,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -78,6 +79,7 @@ public class MenuItemdao implements ICRUD{
             pstmt.setString(1, item.getName());
             pstmt.setInt(2,item.getPrice());
             pstmt.setString(3, item.getDescription());
+            pstmt.setString(4, getCurrentDate());
             retval=pstmt.executeUpdate();
             pstmt.close();
 
@@ -87,20 +89,41 @@ public class MenuItemdao implements ICRUD{
         return retval;
     }
     public void addItem() {
-        System.out.print("=> 새 메뉴 이름을 입력하세요 : ");
-        String name = s.nextLine();
+        String name;
+        while (true) {
+            System.out.print("=> 새 메뉴 이름을 입력하세요 : ");
+            name = s.nextLine();
+            if (name.isEmpty()) {
+                System.out.print("이름은 비워둘 수 없습니다.");
+            } else {
+                break;
+            }
+        }
 
-        System.out.print("=> 새 메뉴의 가격을 입력하세요 : ");
-        int price = s.nextInt();
+        int price;
+        while (true) {
+            System.out.print("가격을 입력하세요 > ");
+            try {
+                price = s.nextInt();
+                s.nextLine();
+                if (price < 0) {
+                    System.out.println("가격은 0 이상이어야 합니다.");
+                    continue;
+                }
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("숫자만 입력해주세요!");
+                s.nextLine();
+            }
+        }
 
-        s.nextLine();
 
         System.out.print("=> 새 메뉴의 설명문을 작성하세요 : ");
         String description = s.nextLine();
 
-        MenuItem one = new MenuItem(0,name,price,description);
-        int retval =add(one);
-        if(retval>0) System.out.println("새 메뉴가 메뉴판에 추가되었습니다.");
+        MenuItem one = new MenuItem(0, name, price, description);
+        int retval = add(one);
+        if (retval > 0) System.out.println("새 메뉴가 메뉴판에 추가되었습니다.");
         else System.out.println("새 메뉴 추가중 에러가 발생했습니다.");
     }
     @Override
