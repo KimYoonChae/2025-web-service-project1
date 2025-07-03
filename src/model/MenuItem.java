@@ -9,12 +9,13 @@ public class MenuItem {
     private int price;
 
     MenuItem(){}
-    public MenuItem(int id, String name, String description, int price) {
+    public MenuItem(int id, String name,int price,String description) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.price = price;
+        this.description = description;
     }
+
 
     public int getId() {
         return id;
@@ -40,4 +41,7 @@ public class MenuItem {
     public void setPrice(int price) {
         this.price = price;
     }
+
+
+
 }

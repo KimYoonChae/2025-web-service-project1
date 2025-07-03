@@ -7,4 +7,16 @@ public class MenuController {
     public void postmenu(){
         menu.listAll();
     }
+    public void search(){
+        menu.searchItem();
+    }
+    public void addmenu(){
+        menu.addItem();
+    }
+    public void updatemenu(){
+        menu.updateItem();
+    }
+    public void deletemenu(){
+        menu.deleteItem();
+    }
 }
