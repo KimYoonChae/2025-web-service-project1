@@ -11,6 +11,8 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Math.random;
+
 public class MenuItemdao implements ICRUD{
     final String selectAll = "select * from menu_item";
     final String MENU_INSERT = "insert into menu_item (name,price,description,regdate)"+" values(?,?,?,?)";
@@ -44,12 +46,33 @@ public class MenuItemdao implements ICRUD{
             e.printStackTrace();
         }
     }
+    public int generateId() {
+        loadData();
+
+        int id = 1;
+        boolean duplicate;
+
+        while (true) {
+            duplicate = false;
+            for (MenuItem item : list) {
+                if (item.getId() == id) {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate) break;
+            id++;
+        }
+
+        return id;
+    }
+
     public void listAll(){
         loadData();
         System.out.println("-------------------------");
         for(int i=0;i<list.size();i++){
             MenuItem item = list.get(i);
-            System.out.printf("%d. [%s] %d원 / %s\n", i + 1, item.getName(), item.getPrice(), item.getDescription());
+            System.out.printf("%d. [%s, id: %d] %d원 / %s\n", i + 1, item.getName(), item.getId(),item.getPrice(), item.getDescription());
         }
         System.out.println("-------------------------");
     }
@@ -61,13 +84,19 @@ public class MenuItemdao implements ICRUD{
     public void searchItem(){
         System.out.print("메뉴를 검색해보세요 > ");
         String name = s.nextLine();
-        for (int i = 0; i < list.size(); i++) {
-            MenuItem item = list.get(i);
+        boolean flag = false;
+        for (MenuItem item : list) {
             if (item.getName().contains(name))
             {
-                System.out.println("검색 결과:");
-                System.out.printf("%s / %d원 / %s\n", item.getId(), item.getName(), item.getPrice(), item.getDescription());
+                if(!flag){
+                    System.out.println("검색 결과:");
+                    flag = true;
+                }
+                System.out.printf("%s / %d원 / %s\n",item.getName(), item.getPrice(), item.getDescription());
             }
+        }
+        if(!flag){
+            System.out.println("메뉴를 찾을 수 없습니다.");
         }
     }
     @Override
@@ -120,8 +149,9 @@ public class MenuItemdao implements ICRUD{
 
         System.out.print("=> 새 메뉴의 설명문을 작성하세요 : ");
         String description = s.nextLine();
+        int id = generateId();
 
-        MenuItem one = new MenuItem(0, name, price, description);
+        MenuItem one = new MenuItem(id, name, price, description);
         int retval = add(one);
         if (retval > 0) System.out.println("새 메뉴가 메뉴판에 추가되었습니다.");
         else System.out.println("새 메뉴 추가중 에러가 발생했습니다.");
@@ -146,7 +176,7 @@ public class MenuItemdao implements ICRUD{
         }
     public void updateItem() {
         listAll();
-        System.out.print("수정할 메뉴 번호를 고르세요 > ");
+        System.out.print("수정할 메뉴 아이디를 고르세요 > ");
         int id=s.nextInt();
         s.nextLine();
         System.out.print("새로운 메뉴명을 입력하세요 > ");
