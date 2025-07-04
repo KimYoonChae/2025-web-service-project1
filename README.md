@@ -91,3 +91,9 @@ SQLite 데이터베이스와 Java를 활용하여 간단한 메뉴 관리 시스
 <img src="./captures/exit.png" width="400"/>
 
 ---
+
+## ✅ 최종 DB 상태
+
+- 추가된 메뉴 항목들은 `regdate`(등록일) 필드와 함께 저장된다.
+
+<img src="./captures/db.png" width="400"/>
